@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}All Tweets{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>All Tweets</h2>
+    {% if user.is_authenticated %}
+    <a href="{% url 'tweet_create' %}" class="btn btn-success">Add Tweet</a>
+    {% endif %}
+</div>
+{% for tweet in tweets %}
+    <div class="card mb-3">
+    <div class="card-body">
+        <strong>{{ tweet.user.username }}</strong>: {{ tweet.text }}
+        <br>
+        {% if tweet.photo %}
+        <img src="{{ tweet.photo.url }}" alt="Tweet Photo" class="img-fluid mt-2" width="200">
+        {% endif %}
+        <div class="mt-2">
+        <small class="text-muted">{{ tweet.created_at }}</small>
+        </div>
+        {% if request.user == tweet.user %}
+        <div class="mt-2">
+            <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger btn-sm">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+{% empty %}
+    <p>No tweets yet.</p>
+{% endfor %}
+{% endblock %}
