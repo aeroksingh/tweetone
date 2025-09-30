@@ -1,7 +1,14 @@
-from django.urls import path
-from . import views
+
+from django.contrib import admin
+from django.urls import path, include  # <-- make sure 'path' is imported here
+from django.conf import settings
+from django.conf.urls.static import static
+from . import views  # ✅ This is the correct one!
+
+
 
 urlpatterns = [
+    
     path('', views.tweet_list, name='tweet_list'),
     path('tweet/create/', views.tweet_create, name='tweet_create'),
     path('tweet/edit/<int:id>/', views.tweet_edit, name='tweet_edit'),

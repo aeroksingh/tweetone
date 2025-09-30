@@ -4,6 +4,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Tweet
 from .forms import TweetForm, UserRegisterForm
 
+def home_view(request):
+    return render(request, 'home.html')
+
+
 def tweet_list(request):
     tweets = Tweet.objects.all().order_by('-created_at')
     return render(request, 'tweet/tweet_list.html', {'tweets': tweets})
@@ -53,18 +57,18 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('tweet_create')
+        return redirect('tweet_list')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('tweet_create')
+            return redirect('tweet_list')
         else:
             return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
     return render(request, 'registration/login.html')
 
 def logout_view(request):
     logout(request)
-    return redirect('tweet_list')
+    return render(request, 'registration/logout.html')
